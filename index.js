@@ -151,7 +151,24 @@ createTaskBlockForm.addEventListener('submit', (event)=> {
 tasks.forEach((element) => {
 	const addTaskItem = addTaskToList(element.id, element.completed, element.text )
 	return createTaskList.append(addTaskItem);
-})
+});
 
-const alert = console.log('Как бы алерт');
-alert();
+
+
+createTaskList.addEventListener('click', (event)=> {
+	const buttonDelete = event.target.closest('.task-item__delete-button');
+	if(buttonDelete) {
+		const deleteID = event.target.getAttribute("data-delete-task-id");
+
+		const deleteTask = tasks.findIndex(element => element.id === deleteID);
+		
+		if(deleteTask >= 0) {
+			console.log(deleteTask);
+			tasks.splice(deleteTask, 1);
+			console.log(tasks);
+		} else {
+			alert('Женя! Всё **йня, давай заново!');
+		}
+	}
+});
+
