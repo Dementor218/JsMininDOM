@@ -152,3 +152,6 @@ tasks.forEach((element) => {
 	const addTaskItem = addTaskToList(element.id, element.completed, element.text )
 	return createTaskList.append(addTaskItem);
 })
+
+const alert = console.log('Как бы алерт');
+alert();
