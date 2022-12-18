@@ -52,7 +52,7 @@ const tasks = [
 	},
 	{
 		id: '1138465078062',
-		completed: false,
+		completed: true,
 		text: 'Выполнить тест после урока',
 	},
 	{
@@ -154,21 +154,85 @@ tasks.forEach((element) => {
 });
 
 
+let modalWindow = (index, name, status)=> {
+
+	// Обертка модального окна
+	let modalWindowOverlay = document.createElement('div');
+	modalWindowOverlay.className = 'modal-overlay';
+
+	let modalWindowDelete = document.createElement('div');
+	modalWindowDelete.className = 'delete-modal';
+	modalWindowOverlay.append(modalWindowDelete);
+
+	let modalWindowTitle = document.createElement('h3');
+	modalWindowTitle.className = 'delete-modal__question';
+
+	if(status === true) {
+		modalWindowTitle.textContent = `Вы действительно хотите удалить задачу "${name}", которая была Выполнена ?`;	
+	} else {
+		modalWindowTitle.textContent = `Вы действительно хотите удалить задачу "${name}", которая была НЕ выполнена ?`;
+	}
+	modalWindowDelete.prepend(modalWindowTitle);
+
+	let modalWindowButtons = document.createElement('div');
+	modalWindowButtons.className = 'delete-modal__buttons';
+	modalWindowDelete.append(modalWindowButtons);
+
+	let modalWindowButtonCancel = document.createElement('button');
+	modalWindowButtonCancel.className = 'delete-modal__button delete-modal__cancel-button';
+	modalWindowButtonCancel.textContent = 'Отмена';
+	modalWindowButtons.prepend(modalWindowButtonCancel);
+
+	let modalWindowButtonConfirm = document.createElement('button');
+	modalWindowButtonConfirm.className = 'delete-modal__button delete-modal__confirm-button';
+	modalWindowButtonConfirm.textContent = 'Удалить';
+	modalWindowButtons.append(modalWindowButtonConfirm);
+
+	return modalWindowOverlay;
+
+}
+
+
 
 createTaskList.addEventListener('click', (event)=> {
 	const buttonDelete = event.target.closest('.task-item__delete-button');
 	if(buttonDelete) {
 		const deleteID = event.target.getAttribute("data-delete-task-id");
-
 		const deleteTask = tasks.findIndex(element => element.id === deleteID);
 		
-		if(deleteTask >= 0) {
-			console.log(deleteTask);
-			tasks.splice(deleteTask, 1);
-			console.log(tasks);
+		console.log(tasks);
+		if(deleteTask !== -1) {
+
+			console.log(tasks[deleteTask]);
+			createTaskList.prepend(modalWindow(deleteTask, tasks[deleteTask].text, tasks[deleteTask].completed));
+
+			let ButtonModalCancel = document.querySelector('.delete-modal__cancel-button');
+			let ButtonModalConfirm = document.querySelector('.delete-modal__confirm-button');
+			if(ButtonModalCancel) {
+				ButtonModalCancel.addEventListener('click', (event)=> {
+					let modalWindowForm = document.querySelector('.modal-overlay');
+					modalWindowForm.remove();
+				});
+			}
+			if(ButtonModalConfirm) {
+				ButtonModalConfirm.addEventListener('click', (event)=> {
+					tasks.splice(deleteTask, 1);
+					
+					let elementDelete = document.querySelector(`.task-item[data-task-id="${deleteID}"]`);
+					elementDelete.remove();
+
+					let modalWindowForm = document.querySelector('.modal-overlay');
+					modalWindowForm.remove();
+				});
+			}
+
 		} else {
 			alert('Женя! Всё **йня, давай заново!');
 		}
 	}
 });
+
+
+
+
 
