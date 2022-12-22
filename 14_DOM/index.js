@@ -232,6 +232,42 @@ createTaskList.addEventListener('click', (event)=> {
 	}
 });
 
+let isDark = false;
+
+const changeTheme = ({
+    bodyBackground,
+    taskItemTextColor,
+    buttonBorder,
+}) => {
+    document.body.style.background = bodyBackground;
+    document.querySelectorAll('.task-item').forEach((taskItem) => {
+        taskItem.style.color = taskItemTextColor;
+    });
+    document.querySelectorAll('button').forEach((button) => {
+        button.style.border = buttonBorder;
+    });
+}
+
+window.addEventListener('keydown', (event) => {
+    const { code } = event;
+    if (code === 'Tab') {
+        event.preventDefault();
+        isDark = !isDark;
+        if (isDark) {
+            changeTheme({
+                bodyBackground: '#24292E',
+                taskItemTextColor: '#ffffff',
+                buttonBorder: '1px solid #ffffff',
+            });
+        } else {
+            changeTheme({
+                bodyBackground: 'initial',
+                taskItemTextColor: 'initial',
+                buttonBorder: 'none',
+            });
+        }
+    }
+});
 
 
 
